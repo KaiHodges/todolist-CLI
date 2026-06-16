@@ -2,5 +2,5 @@
 To-do-list CLI tool written in Go  
 
 ## Tools used 
-    Simple SQLite database for list storage
+Simple SQLite database for list storage
 
