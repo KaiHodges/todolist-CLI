@@ -4,7 +4,7 @@ Copyright © 2026 NAME HERE <EMAIL ADDRESS>
 */
 package main
 
-import() 
+import("github.com/KaiHodges/todolist-CLI/todo/cmd") 
 
 func main() {
 	cmd.Execute()
