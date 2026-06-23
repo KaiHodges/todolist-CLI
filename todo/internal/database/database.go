@@ -13,7 +13,7 @@ type Database struct{
 
 
 func NewDB() *sql.DB {
-	dbPointer, err := sql.Open("sqlite", "list_database.db") 
+	dbPointer, err := sql.Open("sqlite", "/home/khodges/dev/golang/todolist-cli/todo/list_database.db") 
 	if err != nil {
 		log.Panic(err)
 	}
@@ -27,8 +27,8 @@ func (d *Database) AddTodo(title string)  {
 	}
 
 	defer stmt.Close()
-	
-	_, err = stmt.Exec(title, time.Now().String(), 0)
+	t := time.Now() 
+	_, err = stmt.Exec(title, t.Format("2006-01-02 15:04:05"), 0)
 	if err != nil {
 		log.Panic(err)
 	}

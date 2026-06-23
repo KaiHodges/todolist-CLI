@@ -6,7 +6,9 @@ package cmd
 import (
 	"fmt"
 	"log"
-
+	"os"
+	"text/tabwriter"
+  "strconv"
 	"github.com/spf13/cobra"
 )
 
@@ -24,6 +26,7 @@ to quickly create a Cobra application.`,
 		fmt.Println("list called")
  		rows := db.ListTodo()
 		defer rows.Close()
+		w := tabwriter.NewWriter(os.Stdout, 0, 1, 1, ' ', tabwriter.Debug)
 		
 		var ids []int 
 		var tasks []string 
@@ -47,9 +50,19 @@ to quickly create a Cobra application.`,
 		if err := rows.Err(); err != nil {
 			log.Fatal(err)
 		}
-
+		header := "\t " + "ID" + "\t " + "Task" + "\t " + "Date Created" + "\t " + "Completed \t\n"  
+		fmt.Fprintf(w, header)
 		for i := range ids {
-			fmt.Printf("%d, %s, %s, %t\n", i, tasks[i], dates[i], (bools[i] != 0))
+			istring := strconv.Itoa(ids[i])
+			listallflag, err := cmd.Flags().GetBool("all")
+			if err != nil {
+				log.Panic(err)
+			}
+			if bools[i] != 1 || (listallflag != false) {
+			finalstring := "\t " + istring + "\t " + tasks[i] + "\t " + dates[i] + "\t " + strconv.FormatBool((bools[i] != 0)) + "\t" + "\n"
+			fmt.Fprintf(w, finalstring)
+			w.Flush()
+			}
 		}
 
 	},
@@ -66,5 +79,5 @@ func init() {
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	listCmd.Flags().BoolP("all", "a", false, "List all tasks, both completed and not.")
 }
